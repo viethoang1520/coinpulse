@@ -13,7 +13,7 @@ const Header = () => {
           'is-active': pathName === '/',
           'is-home': true
         })}>
-          <Image src='logo.svg' alt='logo' width={132} height={40} />
+          <Image src='/logo.svg' alt='logo' width={132} height={40} />
         </Link>
         <nav>
           <Link href='/' className={cn('nav-link', {
