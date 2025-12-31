@@ -10,7 +10,7 @@ export async function fetcher<T>(
   endpoint: string,
   params?: QueryParams,
   revalidate = 60,
-): Promise<T>{
+): Promise<T> {
   const url = qs.stringifyUrl({
     url: `${BASE_URL}/${endpoint}`,
     query: params
@@ -21,13 +21,12 @@ export async function fetcher<T>(
       "x-cg-pro-api-key": API_KEY,
       "Content-Type": "application/json"
     } as Record<string, string>,
-    next: {revalidate}
+    next: { revalidate }
   })
-
   if (!response.ok) {
     const errorBody: CoinGeckoErrorBody = await response.json()
       .catch(() => ({}))
-    throw new Error( `API Error:${response.status}: ${errorBody.error || response.statusText}` )
+    throw new Error(`API Error:${response.status}: ${errorBody.error || response.statusText}`)
   }
 
   return response.json()
