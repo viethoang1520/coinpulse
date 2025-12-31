@@ -33,7 +33,6 @@ const CandlestickChart = ({
     }
   }
 
-  const [loading, setLoading] = useState(false)
   const [period, setPeriod] = useState(initialPeriod)
   const handlePeriodChange = (newPeriod: Period) => {
     console.log(newPeriod)
@@ -94,7 +93,7 @@ const CandlestickChart = ({
               key={value}
               className={period === value ? "config-button-active" : "config-button"}
               onClick={() => handlePeriodChange(value)}
-              disabled={loading}
+              disabled={isPending}
             >
               {label}
             </button>
