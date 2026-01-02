@@ -18,15 +18,15 @@ export async function fetcher<T>(
   console.log(url)
   const response = await fetch(url, {
     headers: {
-      "x-cg-pro-api-key": API_KEY,
+      "x-cg-demo-api-key": API_KEY,
       "Content-Type": "application/json"
     } as Record<string, string>,
     next: { revalidate }
   })
   if (!response.ok) {
-    const errorBody: CoinGeckoErrorBody = await response.json()
+    const errorBody = await response.json()
       .catch(() => ({}))
-    throw new Error(`API Error:${response.status}: ${errorBody.error || response.statusText}`)
+    throw new Error(`API Error: ${errorBody.status.error_message || response.statusText}`)
   }
 
   return response.json()

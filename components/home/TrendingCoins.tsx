@@ -22,7 +22,7 @@ const TrendingCoins = async () => {
       header: "Name",
       cellClassName: "name-cell",
       cell: (coin) => {
-        const item = coin.item
+        const item = coin.item 
         return (
           <div className="flex items-center gap-3">
             <Image src={item.large} alt={item.name} width={36} height={36} />
