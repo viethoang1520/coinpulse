@@ -21,8 +21,6 @@ const Coins = async ({ searchParams }: NextPageProps) => {
     price_change_percentage: '24h',
   });
 
-  console.log(coinsData)
-  
   const columns: DataTableColumn<CoinMarketData>[] = [
     {
       header: 'Rank',

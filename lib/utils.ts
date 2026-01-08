@@ -118,3 +118,25 @@ export const buildPageNumbers = (
 
   return pages;
 };
+
+export const mapCoinDetailsToTrackingData = (
+  coin: CoinDetailsData
+): CoinTrackingData => {
+  return {
+    id: coin.id,
+    symbol: coin.symbol.toUpperCase(),
+    name: coin.name,
+    image: coin.image.large,
+
+    current_price: coin.market_data.current_price.usd,
+    market_cap: coin.market_data.market_cap.usd,
+
+    total_supply: coin.market_data.total_supply ?? 0,
+    circulating_supply: coin.market_data.circulating_supply ?? 0,
+
+    price_change_percentage_24h:
+      coin.market_data.price_change_percentage_24h_in_currency?.usd ?? 0,
+
+    total_token: 1,
+  }
+}

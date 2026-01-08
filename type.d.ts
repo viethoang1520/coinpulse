@@ -209,6 +209,9 @@ interface CoinDetailsData {
     total_volume: {
       usd: number;
     };
+    total_supply: number;
+    circulating_supply: number;
+    max_supply_infinite: boolean;
   };
   market_cap_rank: number;
   description: {
@@ -315,4 +318,34 @@ interface PoolData {
   address: string;
   name: string;
   network: string;
+}
+
+interface SearchCoinResult {
+    id: string,
+    name: string,
+    symbol: string,
+    market_cap_rank: number,
+    thumb: string,
+    large: string
+}
+
+interface CoinTrackingData {
+  id: string;
+  symbol: string;
+  name: string;
+  image: string;
+  current_price: number;
+  total_token: number;
+  price_change_percentage_24h?: number;
+  market_cap: number;
+  total_supply: number;
+  circulating_supply: number;
+}
+
+interface EventTokenData { 
+  id: string;
+  symbol: string;
+  name: string;
+  web_slug?: string;
+
 }

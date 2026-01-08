@@ -175,6 +175,9 @@
     @apply bg-dark-400/60;
   }
 
+  .flex-center {
+    @apply flex items-center justify-center
+  }
   header {
     @apply border-b border-dark-400 h-20;
 

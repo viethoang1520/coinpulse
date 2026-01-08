@@ -19,7 +19,7 @@ const Header = () => {
           <Link href='/' className={cn('nav-link', {
             'is-active': pathName === '/coins',
           })}>Home</Link>
-          <p>Search modal</p>
+          <Link href='/events'>Events</Link>
           <Link href='/coins'>All Coins</Link>
         </nav>
       </div>
