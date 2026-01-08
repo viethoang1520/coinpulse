@@ -340,6 +340,7 @@ interface CoinTrackingData {
   market_cap: number;
   total_supply: number;
   circulating_supply: number;
+  url: string;
 }
 
 interface EventTokenData { 

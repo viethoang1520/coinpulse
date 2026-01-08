@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input"
 import { fetcher } from "@/lib/coingecko.actions"
 import { cn, formatCurrency, formatPercentage, mapCoinDetailsToTrackingData } from "@/lib/utils"
 import { Search, TrendingDown, TrendingUp } from "lucide-react"
+import Link from "next/link"
 import { useState, useTransition } from "react"
 
 const page = () => {
@@ -12,7 +13,11 @@ const page = () => {
   const columns: DataTableColumn<CoinTrackingData>[] = [
     {
       header: "Name",
-      cell: (coin) => coin.name
+      cell: (coin) => (
+        <Link href={coin.url} className="text-white-500 hover:text-green-500" target="_blank" rel="noopener noreferrer">
+          {coin.name}
+        </Link>
+      )
     },
     {
       header: "Symbol",
@@ -72,7 +77,7 @@ const page = () => {
     try {
       const coinData: CoinDetailsData = await fetcher(`coins/${id}`)
       const mappedData = mapCoinDetailsToTrackingData(coinData)
-      setData(mappedData)
+      setData((prev) => ({...prev, ...mappedData}))
       setSearchResult([])
     } catch (error) {
       console.error('Failed to fetch coin data', error)
@@ -93,7 +98,7 @@ const page = () => {
             />
             <div className="absolute top-10 z-10 w-full rounded-xl bg-dark-400">
               {searchResult.map((coin) => (
-                <div onClick={() => { fetchCoinsData(coin.id)}} key={coin.id} className="h-10 px-5 flex items-center hover:bg-green-500 hover:text-gray-900 hover:cursor-pointer">
+                <div onClick={() => { fetchCoinsData(coin.id) }} key={coin.id} className="h-10 px-5 flex items-center hover:bg-green-500 hover:text-gray-900 hover:cursor-pointer">
                   <p>{coin.name} ({coin.symbol})</p>
                 </div>
               ))}
@@ -107,7 +112,6 @@ const page = () => {
           tableClassName="mt-4"
         />
       </div>
-
     </>
   )
 }

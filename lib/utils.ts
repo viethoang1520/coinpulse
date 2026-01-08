@@ -10,14 +10,14 @@ export function formatCurrency(
   value: number | null | undefined,
   digits?: number,
   currency?: string,
-  showSymbol?: boolean,
+  showSymbol?: boolean | 'en-US',
 ) {
   if (value === null || value === undefined || isNaN(value)) {
     return showSymbol !== false ? '$0.00' : '0.00';
   }
 
   if (showSymbol === undefined || showSymbol === true) {
-    return value.toLocaleString(undefined, {
+    return value.toLocaleString('en-US', {
       style: 'currency',
       currency: currency?.toUpperCase() || 'USD',
       minimumFractionDigits: digits ?? 2,
@@ -122,6 +122,11 @@ export const buildPageNumbers = (
 export const mapCoinDetailsToTrackingData = (
   coin: CoinDetailsData
 ): CoinTrackingData => {
+  const platform = coin.detail_platforms || {}
+  const firstPlatform = Object.values(platform)[0]
+
+  console.log(platform)
+
   return {
     id: coin.id,
     symbol: coin.symbol.toUpperCase(),
@@ -138,5 +143,6 @@ export const mapCoinDetailsToTrackingData = (
       coin.market_data.price_change_percentage_24h_in_currency?.usd ?? 0,
 
     total_token: 1,
+    url: firstPlatform.geckoterminal_url ?? '',
   }
 }
