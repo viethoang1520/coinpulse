@@ -151,3 +151,76 @@ export const CategoriesFallback = () => {
     </div>
   )
 }
+
+export const EventsPageFallback = () => {
+  // Create skeleton data for the events table
+  const skeletonData = Array.from({ length: 8 }, (_, index) => ({
+    id: `skeleton-${index}`,
+    index
+  }))
+
+  const skeletonColumns: DataTableColumn<{ id: string; index: number }>[] = [
+    {
+      header: "Name",
+      cell: () => (
+        <div className="name-line skeleton w-24 h-4"></div>
+      )
+    },
+    {
+      header: "Symbol",
+      cell: () => (
+        <div className="symbol-line skeleton w-12 h-4"></div>
+      )
+    },
+    {
+      header: "Price",
+      cell: () => (
+        <div className="price-line skeleton w-20 h-4"></div>
+      )
+    },
+    {
+      header: "Event Token",
+      cell: () => (
+        <div className="token-line skeleton w-16 h-4"></div>
+      )
+    },
+    {
+      header: "24h Change",
+      cell: () => (
+        <div className="flex gap-1 items-center">
+          <div className="change-line skeleton w-14 h-4"></div>
+          <div className="change-icon skeleton w-4 h-4"></div>
+        </div>
+      )
+    },
+    {
+      header: "Market Cap",
+      cell: () => (
+        <div className="market-cap-line skeleton w-24 h-4"></div>
+      )
+    }
+  ]
+
+  return (
+    <div className="main-container">
+      {/* Title skeleton */}
+      <div className="title-skeleton skeleton w-32 h-6 mb-4"></div>
+
+      {/* Search section skeleton */}
+      <div className="flex-center max-w-[80%] gap-2 mb-4">
+        <div className="label-skeleton skeleton w-20 h-4"></div>
+        <div className="relative w-full">
+          <div className="input-skeleton skeleton w-full h-10 rounded-md"></div>
+        </div>
+      </div>
+
+      {/* DataTable skeleton */}
+      <DataTable
+        columns={skeletonColumns}
+        data={skeletonData}
+        rowKey={(item) => item.id}
+        tableClassName="mt-4"
+      />
+    </div>
+  )
+}

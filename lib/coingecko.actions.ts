@@ -26,7 +26,7 @@ export async function fetcher<T>(
   if (!response.ok) {
     const errorBody = await response.json()
       .catch(() => ({}))
-    throw new Error(`API Error: ${errorBody.status.error_message || response.statusText}`)
+    throw new Error(`API Error: ${errorBody.status || response.statusText}`)
   }
 
   return response.json()
