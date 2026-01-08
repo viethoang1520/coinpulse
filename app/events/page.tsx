@@ -52,7 +52,7 @@ const page = () => {
   ]
   const [isPending, startTransition] = useTransition()
   const [searchResult, setSearchResult] = useState([] as SearchCoinResult[])
-  const [data, setData] = useState<CoinTrackingData | null>(null)
+  const [data, setData] = useState<CoinTrackingData[] | []>([])
   const handleSearchChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
       const query = e.target.value
@@ -77,13 +77,12 @@ const page = () => {
     try {
       const coinData: CoinDetailsData = await fetcher(`coins/${id}`)
       const mappedData = mapCoinDetailsToTrackingData(coinData)
-      setData((prev) => ({...prev, ...mappedData}))
+      setData((prev) => ([...prev, mappedData]))
       setSearchResult([])
     } catch (error) {
       console.error('Failed to fetch coin data', error)
       return <EventsPageFallback />
     }
-
   }
   return (
     <>
@@ -107,7 +106,7 @@ const page = () => {
         </div>
         <DataTable
           columns={columns}
-          data={data ? [data] : []}
+          data={data}
           rowKey={(coin) => coin.id}
           tableClassName="mt-4"
         />
