@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input"
 import { fetcher } from "@/lib/coingecko.actions"
 import { cn, formatCurrency, formatPercentage, mapCoinDetailsToTrackingData } from "@/lib/utils"
 import { Search, TrendingDown, TrendingUp } from "lucide-react"
+import Image from "next/image"
 import Link from "next/link"
 import { useState, useTransition } from "react"
 
@@ -12,19 +13,20 @@ const page = () => {
 
   const columns: DataTableColumn<CoinTrackingData>[] = [
     {
-      header: "Name",
+      header: "Token",
       cell: (coin) => (
-        <Link href={coin.url} className="text-white-500 hover:text-green-500" target="_blank" rel="noopener noreferrer">
-          {coin.name}
-        </Link>
+        <div className="flex items-center gap-2">
+          <Image src={coin.image} alt={coin.name} width={36} height={36} />
+          <Link href={coin.url} className="text-white-500 font-medium hover:text-green-500" target="_blank" rel="noopener noreferrer">
+            {coin.name} ({coin.symbol.toUpperCase()})
+          </Link>
+
+        </div>
       )
     },
     {
-      header: "Symbol",
-      cell: (coin) => coin.symbol
-    },
-    {
       header: "Price",
+      cellClassName: "font-medium",
       cell: (coin) => formatCurrency(coin.current_price * (coin.total_token || 1))
     },
     {
@@ -37,16 +39,18 @@ const page = () => {
       cell: (coin) => {
         const marketCap = formatCurrency(coin.market_cap)
         return (
-          <p className="text-white-500">{marketCap}</p>
+          <p className="text-white-500 font-medium">{marketCap}</p>
         )
       }
     },
     {
       header: "Total Supply",
+      cellClassName: "font-medium",
       cell: (coin) => coin.total_supply ? coin.total_supply.toLocaleString() : 'N/A'
     },
     {
       header: "Circulating Supply",
+      cellClassName: "font-medium",
       cell: (coin) => coin.circulating_supply ? coin.circulating_supply.toLocaleString() : 'N/A'
     }
   ]
@@ -105,10 +109,10 @@ const page = () => {
           </div>
         </div>
         <DataTable
+          tableClassName="bg-dark-500 rounded-xl max-h-fit overflow-hidden"
           columns={columns}
           data={data}
           rowKey={(coin) => coin.id}
-          tableClassName="mt-4"
         />
       </div>
     </>
