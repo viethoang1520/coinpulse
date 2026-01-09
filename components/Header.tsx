@@ -17,10 +17,15 @@ const Header = () => {
         </Link>
         <nav>
           <Link href='/' className={cn('nav-link', {
-            'is-active': pathName === '/coins',
+            'is-active': pathName === '/',
+            'is-home': true
           })}>Home</Link>
-          <Link href='/events'>Events</Link>
-          <Link href='/coins'>All Coins</Link>
+          <Link href='/events' className={cn('nav-link', {
+            'is-active': pathName === '/events',
+          })}>Events</Link>
+          <Link href='/coins' className={cn('nav-link', {
+            'is-active': pathName === '/coins',
+          })}>All Coins</Link>
         </nav>
       </div>
     </header>
