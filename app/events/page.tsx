@@ -7,7 +7,7 @@ import { cn, formatCurrency, formatPercentage, mapCoinDetailsToTrackingData } fr
 import { Search, TrendingDown, TrendingUp } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { useState, useTransition } from "react"
+import { useEffect, useState, useTransition } from "react"
 
 const page = () => {
 
@@ -20,7 +20,6 @@ const page = () => {
           <Link href={coin.url} className="text-white-500 font-medium hover:text-green-500" target="_blank" rel="noopener noreferrer">
             {coin.name} ({coin.symbol.toUpperCase()})
           </Link>
-
         </div>
       )
     },
@@ -57,6 +56,12 @@ const page = () => {
   const [isPending, startTransition] = useTransition()
   const [searchResult, setSearchResult] = useState([] as SearchCoinResult[])
   const [data, setData] = useState<CoinTrackingData[] | []>([])
+  useEffect(() => {
+    const trackedCoins = localStorage.getItem('trackedCoins')
+    if (trackedCoins) {
+      setData(JSON.parse(trackedCoins))
+    }
+  }, [])
   const handleSearchChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
       const query = e.target.value
@@ -82,6 +87,7 @@ const page = () => {
       const coinData: CoinDetailsData = await fetcher(`coins/${id}`)
       const mappedData = mapCoinDetailsToTrackingData(coinData)
       setData((prev) => ([...prev, mappedData]))
+      localStorage.setItem('trackedCoins', JSON.stringify([...data, mappedData]))
       setSearchResult([])
     } catch (error) {
       console.error('Failed to fetch coin data', error)
@@ -109,7 +115,9 @@ const page = () => {
           </div>
         </div>
         <DataTable
-          tableClassName="bg-dark-500 rounded-xl max-h-fit overflow-hidden"
+          tableClassName={cn("bg-dark-500 rounded-xl max-h-fit overflow-hidden", {
+            "hidden": !data.length ,
+          })}
           columns={columns}
           data={data}
           rowKey={(coin) => coin.id}
