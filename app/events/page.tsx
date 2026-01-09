@@ -3,7 +3,7 @@ import DataTable from "@/components/DataTable"
 import { EventsPageFallback } from "@/components/home/fallback"
 import { Input } from "@/components/ui/input"
 import { fetcher } from "@/lib/coingecko.actions"
-import { cn, formatCurrency, formatPercentage, mapCoinDetailsToTrackingData } from "@/lib/utils"
+import { cn, doesCoinExist, formatCurrency, formatPercentage, mapCoinDetailsToTrackingData } from "@/lib/utils"
 import { Search, TrendingDown, TrendingUp } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
@@ -82,8 +82,16 @@ const page = () => {
     }
   }
 
+
+
   const fetchCoinsData = async (id: string) => {
     try {
+      if (doesCoinExist(id, data)) {
+        console.warn(`Coin with ID "${id}" is already being tracked`)
+        setSearchResult([])
+        return
+      }
+
       const coinData: CoinDetailsData = await fetcher(`coins/${id}`)
       const mappedData = mapCoinDetailsToTrackingData(coinData)
       setData((prev) => ([...prev, mappedData]))
@@ -102,10 +110,10 @@ const page = () => {
           <label className="min-w-25 ">Search coins:</label>
           <div className="relative w-full min-h-full">
             <Input
-              placeholder="Bitcoin..."
+              placeholder="btc, kgen, bob..."
               onChange={(e) => handleSearchChange(e)}
             />
-            <div className="absolute top-10 z-10 w-full rounded-xl bg-dark-400">
+            <div className="absolute top-10 z-10 w-full rounded-xl bg-dark-400 overflow-hidden">
               {searchResult.map((coin) => (
                 <div onClick={() => { fetchCoinsData(coin.id) }} key={coin.id} className="h-10 px-5 flex items-center hover:bg-green-500 hover:text-gray-900 hover:cursor-pointer">
                   <p>{coin.name} ({coin.symbol})</p>
@@ -116,7 +124,7 @@ const page = () => {
         </div>
         <DataTable
           tableClassName={cn("bg-dark-500 rounded-xl max-h-fit overflow-hidden", {
-            "hidden": !data.length ,
+            "hidden": !data.length,
           })}
           columns={columns}
           data={data}

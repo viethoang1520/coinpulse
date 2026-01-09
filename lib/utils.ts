@@ -146,3 +146,8 @@ export const mapCoinDetailsToTrackingData = (
     url: firstPlatform.geckoterminal_url ?? '',
   }
 }
+
+// Function to check if coin ID exists in the data list
+export const doesCoinExist = (coinId: string, data: CoinTrackingData[]): boolean => {
+  return data.some(coin => coin.id === coinId)
+}
