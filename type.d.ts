@@ -321,12 +321,12 @@ interface PoolData {
 }
 
 interface SearchCoinResult {
-    id: string,
-    name: string,
-    symbol: string,
-    market_cap_rank: number,
-    thumb: string,
-    large: string
+  id: string,
+  name: string,
+  symbol: string,
+  market_cap_rank: number,
+  thumb: string,
+  large: string
 }
 
 interface CoinTrackingData {
@@ -343,10 +343,22 @@ interface CoinTrackingData {
   url: string;
 }
 
-interface EventTokenData { 
+interface EventTokenData {
   id: string;
   symbol: string;
   name: string;
   web_slug?: string;
 
+}
+
+interface DialogProps {
+  trigger: React.ReactNode;
+  header: string;
+  description?: string;
+  input?: [{
+    label: string;
+    default?: string;
+  }],
+  onCancel?: () => void;
+  onSave?: (coin: CoinTrackingData) => void;
 }
