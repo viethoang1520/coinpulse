@@ -54,7 +54,6 @@ const Coins = async ({ searchParams }: NextPageProps) => {
       cellClassName: 'change-cell',
       cell: (coin) => {
         const isTrendingUp = coin.price_change_percentage_24h > 0;
-
         return (
           <span
             className={cn('change-value', {
@@ -83,14 +82,12 @@ const Coins = async ({ searchParams }: NextPageProps) => {
     <main id="coins-page">
       <div className="content">
         <h4>All Coins</h4>
-
         <DataTable
           tableClassName="coins-table"
           columns={columns}
           data={coinsData}
           rowKey={(coin) => coin.id}
         />
-
         <CoinsPagination
           currentPage={currentPage}
           totalPages={estimatedTotalPages}

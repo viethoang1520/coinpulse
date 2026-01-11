@@ -22,7 +22,7 @@ const TrendingCoins = async () => {
       header: "Name",
       cellClassName: "name-cell",
       cell: (coin) => {
-        const item = coin.item 
+        const item = coin.item
         return (
           <div className="flex items-center gap-3">
             <Image src={item.large} alt={item.name} width={36} height={36} />
@@ -75,20 +75,19 @@ const TrendingCoins = async () => {
     }
   ]
 
-    return (
-      <div id='trending-coins'>
-        <h4 className="text-white text-lg font-medium">Trending Coins</h4>
-        <DataTable
-          data={trendingCoins.coins.slice(0, 6) || []}
-          columns={columns}
-          rowKey={(coin, index) => coin.item.id || index}
-          tableClassName='trending-coins-table'
-          headerCellClassName='py-3!'
-          bodyCellClassName='py-y-2'
-        />
-      </div>
-    )
-
+  return (
+    <div id='trending-coins'>
+      <h4 className="text-white text-lg font-medium">Trending Coins</h4>
+      <DataTable
+        data={trendingCoins.coins.slice(0, 6) || []}
+        columns={columns}
+        rowKey={(coin, index) => coin.item.id || index}
+        tableClassName='trending-coins-table'
+        headerCellClassName='py-3!'
+        bodyCellClassName='py-y-2'
+      />
+    </div>
+  )
 }
 
 export default TrendingCoins

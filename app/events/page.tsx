@@ -1,10 +1,11 @@
 'use client'
 import DataTable from "@/components/DataTable"
+import EditTokenDialog from "@/components/EditTokenDialog"
 import { EventsPageFallback } from "@/components/home/fallback"
 import { Input } from "@/components/ui/input"
 import { fetcher } from "@/lib/coingecko.actions"
-import { cn, doesCoinExist, formatCurrency, formatPercentage, mapCoinDetailsToTrackingData } from "@/lib/utils"
-import { Search, TrendingDown, TrendingUp } from "lucide-react"
+import { cn, doesCoinExist, formatCurrency, mapCoinDetailsToTrackingData } from "@/lib/utils"
+import { Pencil, Trash, Trash2 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useState, useTransition } from "react"
@@ -51,6 +52,27 @@ const page = () => {
       header: "Circulating Supply",
       cellClassName: "font-medium",
       cell: (coin) => coin.circulating_supply ? coin.circulating_supply.toLocaleString() : 'N/A'
+    },
+    {
+      header: "Actions",
+      cell: (coin) => {
+        return (
+          <div className="flex items-center gap-3 ">
+            <Trash2 onClick={() => handleDelete(coin.id)} className="hover:cursor-pointer" size={18} color="red" />
+            <EditTokenDialog
+              trigger={<Pencil className="hover:cursor-pointer" size={18} color="#aeadad" />}
+              header={`Edit ${coin.name} total token`}
+              description="Please type the event token returned"
+              input={[{
+                label: "Total Token",
+                default: coin.total_token?.toString() || "0"
+              }]}
+              onCancel={() => console.log('Edit cancelled')}
+              onSave={(formData) => handleEdit(coin.id, formData)} // Pass both id and form data
+            />
+          </div>
+        )
+      }
     }
   ]
   const [isPending, startTransition] = useTransition()
@@ -82,8 +104,6 @@ const page = () => {
     }
   }
 
-
-
   const fetchCoinsData = async (id: string) => {
     try {
       if (doesCoinExist(id, data)) {
@@ -91,7 +111,6 @@ const page = () => {
         setSearchResult([])
         return
       }
-
       const coinData: CoinDetailsData = await fetcher(`coins/${id}`)
       const mappedData = mapCoinDetailsToTrackingData(coinData)
       setData((prev) => ([...prev, mappedData]))
@@ -101,6 +120,28 @@ const page = () => {
       console.error('Failed to fetch coin data', error)
       return <EventsPageFallback />
     }
+  }
+  const handleDelete = (id: string) => {
+    const doesCoinExist = data.find((coin) => coin.id === id)
+    if (!doesCoinExist) return
+    const newData = data.filter((coin) => coin.id != id)
+    setData(newData)
+    localStorage.setItem("trackedCoins", JSON.stringify(newData))
+  }
+  const handleEdit = (id: string, formData: Record<string, string>) => {
+    const totalTokenValue = formData.total_token || formData['total_token'] || formData['Total Token'] || Object.values(formData)[0]
+    const updatedData = data.map(coin => {
+      if (coin.id === id) {
+        return {
+          ...coin,
+          total_token: parseFloat(totalTokenValue) || 0
+        }
+      }
+      return coin
+    })
+
+    setData(updatedData)
+    localStorage.setItem("trackedCoins", JSON.stringify(updatedData))
   }
   return (
     <>
