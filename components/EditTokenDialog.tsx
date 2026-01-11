@@ -11,6 +11,9 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { createFieldName } from "@/lib/utils"
+import { useState } from "react"
+
 const EditTokenDialog = ({
   trigger,
   header,
@@ -19,39 +22,53 @@ const EditTokenDialog = ({
   onCancel,
   onSave
 }: DialogProps) => {
+  const [open, setOpen] = useState(false)
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const formData = new FormData(e.currentTarget)
+    const values: Record<string, string> = {}
+    input?.forEach(({ label }) => {
+      const fieldName = createFieldName(label)
+      values[fieldName] = formData.get(fieldName) as string
+    })
+    if (onSave) {
+      onSave(values)
+    }
+    setOpen(false) // Close dialog after saving
+  }
+
   return (
-    <Dialog>
-      <form >
-        <DialogTrigger asChild>
-          {trigger}
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>{header}</DialogTitle>
-            <DialogDescription>
-              {description}
-            </DialogDescription>
-          </DialogHeader>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        {trigger}
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>{header}</DialogTitle>
+          <DialogDescription>
+            {description}
+          </DialogDescription>
+        </DialogHeader>
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid gap-4">
             {input?.map(({ label, default: defaultValue }, index) => (
               <div className="grid gap-3" key={index}>
                 <Label htmlFor={`input-${index}`}>{label}</Label>
-                <Input id={`input-${index}`} name={label.toLowerCase()} defaultValue={defaultValue} />
+                <Input id={`input-${index}`} name={createFieldName(label)} defaultValue={defaultValue} />
               </div>
             ))}
           </div>
           <DialogFooter>
             {onCancel &&
-              <DialogClose asChild>
-                <Button onClick={onCancel} variant="outline">Cancel</Button>
-              </DialogClose>
+              <Button className="hover:cursor-pointer" onClick={() => { onCancel(); setOpen(false); }} variant="outline" type="button">Cancel</Button>
             }
             {onSave &&
-              <Button onClick={() => onSave} type="submit">Save changes</Button>
+              <Button className="hover:cursor-pointer" type="submit">Save changes</Button>
             }
           </DialogFooter>
-        </DialogContent>
-      </form>
+        </form>
+      </DialogContent>
     </Dialog>
   )
 }

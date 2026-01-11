@@ -360,5 +360,5 @@ interface DialogProps {
     default?: string;
   }],
   onCancel?: () => void;
-  onSave?: (coin: CoinTrackingData) => void;
+  onSave?: (formData: Record<string, string>) => void
 }

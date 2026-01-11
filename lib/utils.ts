@@ -151,3 +151,10 @@ export const mapCoinDetailsToTrackingData = (
 export const doesCoinExist = (coinId: string, data: CoinTrackingData[]): boolean => {
   return data.some(coin => coin.id === coinId)
 }
+
+export const createFieldName = (label: string) => {
+  return label
+    .toLowerCase()
+    .replace(/\s+/g, '_') // Replace spaces with underscores
+    .replace(/[^a-z0-9_]/g, '') // Remove special characters except underscores
+}

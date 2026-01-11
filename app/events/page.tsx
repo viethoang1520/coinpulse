@@ -65,9 +65,10 @@ const page = () => {
               description="Please type the event token returned"
               input={[{
                 label: "Total Token",
+                default: coin.total_token?.toString() || "0"
               }]}
-              onCancel={() => { }}
-              onSave={(coin) => handleEdit(coin.id)}
+              onCancel={() => console.log('Edit cancelled')}
+              onSave={(formData) => handleEdit(coin.id, formData)} // Pass both id and form data
             />
           </div>
         )
@@ -127,8 +128,20 @@ const page = () => {
     setData(newData)
     localStorage.setItem("trackedCoins", JSON.stringify(newData))
   }
-  const handleEdit = (id: string) => {
-    
+  const handleEdit = (id: string, formData: Record<string, string>) => {
+    const totalTokenValue = formData.total_token || formData['total_token'] || formData['Total Token'] || Object.values(formData)[0]
+    const updatedData = data.map(coin => {
+      if (coin.id === id) {
+        return {
+          ...coin,
+          total_token: parseFloat(totalTokenValue) || 0
+        }
+      }
+      return coin
+    })
+
+    setData(updatedData)
+    localStorage.setItem("trackedCoins", JSON.stringify(updatedData))
   }
   return (
     <>
